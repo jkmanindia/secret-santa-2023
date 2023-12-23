@@ -20,13 +20,16 @@
         #loginOptions {
             display: none;
         }
+
+        #adminSection {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>Welcome to Secret Santa 2023</h1>
 
     <script>
-        // Show login options after 3 seconds
         setTimeout(function() {
             document.getElementById("loginOptions").style.display = "block";
         }, 3000);
@@ -35,10 +38,7 @@
     <div id="loginOptions">
         <h2>Login Options</h2>
         
-        <!-- User Login -->
         <button onclick="login('user')">Login as User</button>
-
-        <!-- Admin Login -->
         <button onclick="login('admin')">Login as Admin</button>
 
         <div id="loginForm" style="display: none;">
@@ -52,7 +52,28 @@
         </div>
     </div>
 
+    <div id="adminSection">
+        <h2>Admin Section</h2>
+
+        <label for="newName">Add Participant:</label>
+        <input type="text" id="newName">
+        <button onclick="addParticipant()">Add Participant</button>
+
+        <label for="removeName">Remove Participant:</label>
+        <select id="removeName"></select>
+        <button onclick="removeParticipant()">Remove Participant</button>
+
+        <div id="participantsList">
+            <h3>Participants List</h3>
+            <ul id="participants"></ul>
+        </div>
+    </div>
+
     <script>
+        const adminPassword = "jkings";
+        let isLoggedIn = false;
+        let names = [];
+
         function login(role) {
             document.getElementById("loginForm").style.display = "block";
             document.getElementById("userId").value = "";
@@ -65,15 +86,56 @@
             const password = document.getElementById("password").value;
             const role = document.getElementById("role").value;
 
-            if (role === "admin" && userId === "ADMIN" && password === "jkings") {
-                alert("Admin login successful!");
-                // Add admin-specific actions here
+            if (role === "admin" && userId === "ADMIN" && password === adminPassword) {
+                isLoggedIn = true;
+                document.getElementById("loginOptions").style.display = "none";
+                document.getElementById("adminSection").style.display = "block";
+                updateParticipantsList();
             } else if (role === "user") {
-                alert("User login successful!");
+                isLoggedIn = true;
+                document.getElementById("loginOptions").style.display = "none";
                 // Add user-specific actions here
             } else {
                 alert("Invalid credentials. Please try again.");
             }
+        }
+
+        function addParticipant() {
+            const newName = document.getElementById("newName").value;
+            if (newName.trim() !== "") {
+                names.push(newName);
+                updateParticipantsList();
+            }
+        }
+
+        function removeParticipant() {
+            const removeNameSelect = document.getElementById("removeName");
+            const selectedName = removeNameSelect.options[removeNameSelect.selectedIndex].text;
+
+            const index = names.indexOf(selectedName);
+            if (index !== -1) {
+                names.splice(index, 1);
+                updateParticipantsList();
+            }
+        }
+
+        function updateParticipantsList() {
+            const participantsListElement = document.getElementById("participants");
+            const removeNameSelect = document.getElementById("removeName");
+
+            participantsListElement.innerHTML = "";
+            removeNameSelect.innerHTML = "";
+
+            names.forEach(name => {
+                const li = document.createElement("li");
+                li.innerText = name;
+                participantsListElement.appendChild(li);
+
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                removeNameSelect.add(option);
+            });
         }
     </script>
 </body>
