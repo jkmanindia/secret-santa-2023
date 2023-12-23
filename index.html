@@ -54,10 +54,10 @@
             const loginWindow = window.open("", "Login", "width=400,height=300");
             loginWindow.document.write(`
                 <label for="userId">User ID:</label>
-                <input type="text" id="userId">
+                <input type="text" id="userId" value="USER">
                 <br>
                 <label for="password">Password:</label>
-                <input type="password" id="password">
+                <input type="password" id="password" value="password">
                 <br>
                 <button onclick="authenticate('${role}')">Login</button>
             `);
@@ -75,18 +75,20 @@
         }
 
         function authenticate(role) {
-            const userId = document.getElementById("userId").value;
-            const password = document.getElementById("password").value;
+            if (role === "admin") {
+                const userId = document.getElementById("userId").value;
+                const password = document.getElementById("password").value;
 
-            if (role === "admin" && userId === "ADMIN" && password === adminPassword) {
-                isLoggedIn = true;
-                alert("Admin login successful!");
-                document.getElementById("adminSection").style.display = "block";
-                updateParticipantsList();
-            } else if (role === "user") {
-                openUserInterface();
+                if (userId === "ADMIN" && password === adminPassword) {
+                    isLoggedIn = true;
+                    alert("Admin login successful!");
+                    document.getElementById("adminSection").style.display = "block";
+                    updateParticipantsList();
+                } else {
+                    alert("Invalid admin credentials. Please try again.");
+                }
             } else {
-                alert("Invalid credentials. Please try again.");
+                openUserInterface();
             }
         }
 
@@ -100,33 +102,4 @@
 
         function removeParticipant() {
             const removeNameSelect = document.getElementById("removeName");
-            const selectedName = removeNameSelect.options[removeNameSelect.selectedIndex].text;
-
-            const index = names.indexOf(selectedName);
-            if (index !== -1) {
-                names.splice(index, 1);
-                updateParticipantsList();
-            }
-        }
-
-        function updateParticipantsList() {
-            const participantsListElement = document.getElementById("participants");
-            const removeNameSelect = document.getElementById("removeName");
-
-            participantsListElement.innerHTML = "";
-            removeNameSelect.innerHTML = "";
-
-            names.forEach(name => {
-                const li = document.createElement("li");
-                li.innerText = name;
-                participantsListElement.appendChild(li);
-
-                const option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                removeNameSelect.add(option);
-            });
-        }
-    </script>
-</body>
-</html>
+            const selectedName = removeNameSelect.options[removeNameSelect.selectedIndex
