@@ -26,7 +26,7 @@
     <h1>Welcome to Secret Santa 2023</h1>
 
     <button onclick="openLoginWindow('admin')">Login as Admin</button>
-    <button onclick="openLoginWindow('user')">Login as User</button>
+    <button onclick="openUserInterface()">Login as User</button>
 
     <div id="adminSection">
         <h2>Admin Section</h2>
@@ -63,6 +63,17 @@
             `);
         }
 
+        function openUserInterface() {
+            const userInterfaceWindow = window.open("", "UserInterface", "width=600,height=400");
+            userInterfaceWindow.document.write(`
+                <h1>User Interface</h1>
+                <p>Welcome to the Secret Santa User Interface!</p>
+                <!-- Add user-specific content here -->
+            `);
+            // You can also pass data like names to the user interface window
+            userInterfaceWindow.names = names;
+        }
+
         function authenticate(role) {
             const userId = document.getElementById("userId").value;
             const password = document.getElementById("password").value;
@@ -73,9 +84,7 @@
                 document.getElementById("adminSection").style.display = "block";
                 updateParticipantsList();
             } else if (role === "user") {
-                isLoggedIn = true;
-                alert("User login successful!");
-                // Add user-specific actions here
+                openUserInterface();
             } else {
                 alert("Invalid credentials. Please try again.");
             }
