@@ -84,17 +84,12 @@
         function authenticate() {
             const userId = document.getElementById("userId").value;
             const password = document.getElementById("password").value;
-            const role = document.getElementById("role").value;
 
-            if (role === "admin" && userId === "ADMIN" && password === adminPassword) {
+            if (userId === "ADMIN" && password === adminPassword) {
                 isLoggedIn = true;
                 document.getElementById("loginOptions").style.display = "none";
                 document.getElementById("adminSection").style.display = "block";
                 updateParticipantsList();
-            } else if (role === "user") {
-                isLoggedIn = true;
-                document.getElementById("loginOptions").style.display = "none";
-                // Add user-specific actions here
             } else {
                 alert("Invalid credentials. Please try again.");
             }
@@ -109,3 +104,34 @@
         }
 
         function removeParticipant() {
+            const removeNameSelect = document.getElementById("removeName");
+            const selectedName = removeNameSelect.options[removeNameSelect.selectedIndex].text;
+
+            const index = names.indexOf(selectedName);
+            if (index !== -1) {
+                names.splice(index, 1);
+                updateParticipantsList();
+            }
+        }
+
+        function updateParticipantsList() {
+            const participantsListElement = document.getElementById("participants");
+            const removeNameSelect = document.getElementById("removeName");
+
+            participantsListElement.innerHTML = "";
+            removeNameSelect.innerHTML = "";
+
+            names.forEach(name => {
+                const li = document.createElement("li");
+                li.innerText = name;
+                participantsListElement.appendChild(li);
+
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                removeNameSelect.add(option);
+            });
+        }
+    </script>
+</body>
+</html>
