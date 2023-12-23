@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Santa 2023</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        #loginOptions {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Secret Santa 2023</h1>
+
+    <script>
+        // Show login options after 3 seconds
+        setTimeout(function() {
+            document.getElementById("loginOptions").style.display = "block";
+        }, 3000);
+    </script>
+
+    <div id="loginOptions">
+        <h2>Login Options</h2>
+        
+        <!-- User Login -->
+        <button onclick="login('user')">Login as User</button>
+
+        <!-- Admin Login -->
+        <button onclick="login('admin')">Login as Admin</button>
+
+        <div id="loginForm" style="display: none;">
+            <label for="userId">User ID:</label>
+            <input type="text" id="userId">
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password">
+            <br>
+            <button onclick="authenticate()">Login</button>
+        </div>
+    </div>
+
+    <script>
+        function login(role) {
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("userId").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("role").value = role;
+        }
+
+        function authenticate() {
+            const userId = document.getElementById("userId").value;
+            const password = document.getElementById("password").value;
+            const role = document.getElementById("role").value;
+
+            if (role === "admin" && userId === "ADMIN" && password === "jkings") {
+                alert("Admin login successful!");
+                // Add admin-specific actions here
+            } else if (role === "user") {
+                alert("User login successful!");
+                // Add user-specific actions here
+            } else {
+                alert("Invalid credentials. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
