@@ -17,10 +17,6 @@
             margin: 10px;
         }
 
-        #loginOptions {
-            display: none;
-        }
-
         #adminSection {
             display: none;
         }
@@ -29,29 +25,8 @@
 <body>
     <h1>Welcome to Secret Santa 2023</h1>
 
-    <script>
-        setTimeout(function() {
-            document.getElementById("loginOptions").style.display = "block";
-            document.getElementById("loginForm").style.display = "block";
-        }, 3000);
-    </script>
-
-    <div id="loginOptions">
-        <h2>Login Options</h2>
-        
-        <button onclick="login('user')">Login as User</button>
-        <button onclick="login('admin')">Login as Admin</button>
-
-        <div id="loginForm" style="display: none;">
-            <label for="userId">User ID:</label>
-            <input type="text" id="userId">
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password">
-            <br>
-            <button onclick="authenticate()">Login</button>
-        </div>
-    </div>
+    <button onclick="openLoginWindow('admin')">Login as Admin</button>
+    <button onclick="openLoginWindow('user')">Login as User</button>
 
     <div id="adminSection">
         <h2>Admin Section</h2>
@@ -75,22 +50,32 @@
         let isLoggedIn = false;
         let names = [];
 
-        function login(role) {
-            document.getElementById("loginForm").style.display = "block";
-            document.getElementById("userId").value = "";
-            document.getElementById("password").value = "";
-            document.getElementById("role").value = role;
+        function openLoginWindow(role) {
+            const loginWindow = window.open("", "Login", "width=400,height=300");
+            loginWindow.document.write(`
+                <label for="userId">User ID:</label>
+                <input type="text" id="userId">
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="password">
+                <br>
+                <button onclick="authenticate('${role}')">Login</button>
+            `);
         }
 
-        function authenticate() {
+        function authenticate(role) {
             const userId = document.getElementById("userId").value;
             const password = document.getElementById("password").value;
 
-            if (userId === "ADMIN" && password === adminPassword) {
+            if (role === "admin" && userId === "ADMIN" && password === adminPassword) {
                 isLoggedIn = true;
-                document.getElementById("loginOptions").style.display = "none";
+                alert("Admin login successful!");
                 document.getElementById("adminSection").style.display = "block";
                 updateParticipantsList();
+            } else if (role === "user") {
+                isLoggedIn = true;
+                alert("User login successful!");
+                // Add user-specific actions here
             } else {
                 alert("Invalid credentials. Please try again.");
             }
