@@ -109,34 +109,3 @@
         }
 
         function removeParticipant() {
-            const removeNameSelect = document.getElementById("removeName");
-            const selectedName = removeNameSelect.options[removeNameSelect.selectedIndex].text;
-
-            const index = names.indexOf(selectedName);
-            if (index !== -1) {
-                names.splice(index, 1);
-                updateParticipantsList();
-            }
-        }
-
-        function updateParticipantsList() {
-            const participantsListElement = document.getElementById("participants");
-            const removeNameSelect = document.getElementById("removeName");
-
-            participantsListElement.innerHTML = "";
-            removeNameSelect.innerHTML = "";
-
-            names.forEach(name => {
-                const li = document.createElement("li");
-                li.innerText = name;
-                participantsListElement.appendChild(li);
-
-                const option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                removeNameSelect.add(option);
-            });
-        }
-    </script>
-</body>
-</html>
