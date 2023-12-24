@@ -1,44 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Santa 2023</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-        }
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import random
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px;
-        }
+# Function to send an email
+def send_email(sender_email, sender_password, recipient_email, subject, body):
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = recipient_email
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
 
-        #adminSection {
-            display: none;
-        }
+    with smtplib.SMTP('smtp.example.com', 587) as server:
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, recipient_email, message.as_string())
 
-        #loginModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1;
-        }
+# Function to perform the Secret Santa assignment
+def secret_santa(participants):
+    random.shuffle(participants)
+    assignments = {participants[i]: participants[(i + 1) % len(participants)] for i in range(len(participants))}
 
-        #loginForm {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-        }
-    </style>
-</head>
-<bod
+    return assignments
+
+# Replace these with your own email and server details
+sender_email = 'your_email@example.com'
+sender_password = 'your_email_password'
+email_subject = 'Secret Santa Assignment'
+
+# List of participants' email addresses
+participants = ['participant1@example.com', 'participant2@example.com', 'participant3@example.com', 'participant4@example.com']
+
+# Perform Secret Santa assignment
+assignments = secret_santa(participants)
+
+# Send emails with assignments
+for sender, recipient in assignments.items():
+    body = f'Hello {sender}! Your Secret Santa recipient is: {recipient}'
+    send_email(sender_email, sender_password, sender, email_subject, body)
+    print(f'Email sent to {sender}')
+
+print('Secret Santa assignments have been sent!')
